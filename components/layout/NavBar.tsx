@@ -4,6 +4,9 @@ import { MapPin, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+let user_id = 1
+let backend_url = "http://localhost:5011"
+
 export function Navbar() {
 	const pathname = usePathname();
 	const isAttractionsPage = pathname === '/';
@@ -31,7 +34,7 @@ export function Navbar() {
 						Lankytinos vietos
 					</Link>
 					<Link
-						href='/trip/1'
+						href={`${backend_url}/trip/open-trips-page?userId=${user_id}`}
 						className={`transition-colors ${
 							isTripsPage ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'
 						}`}

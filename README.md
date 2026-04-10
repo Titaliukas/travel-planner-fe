@@ -2,6 +2,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Backend
+
+ensure you have these installed
+`dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 9.0.0`
+`dotnet add package Microsoft.EntityFrameworkCore.Design --version 9.0.0`
+`dotnet add package Microsoft.EntityFrameworkCore.Tools --version 9.0.0`
+
 First, run the development server:
 
 ```bash
