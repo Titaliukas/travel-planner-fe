@@ -4,13 +4,15 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ### Backend
 
-ensure you have these installed
-`dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 9.0.0`
-`dotnet add package Microsoft.EntityFrameworkCore.Design --version 9.0.0`
-`dotnet add package Microsoft.EntityFrameworkCore.Tools --version 9.0.0`
+ensure you have these installed (probably will install when building for the first time)
+* `dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 9.0.0`
+* `dotnet add package Microsoft.EntityFrameworkCore.Design --version 9.0.0`
+* `dotnet add package Microsoft.EntityFrameworkCore.Tools --version 9.0.0`
 
+run migrations/create database
+* `dotnet ef database update`
+### Frontend
 First, run the development server:
-
 ```bash
 npm run dev
 # or
