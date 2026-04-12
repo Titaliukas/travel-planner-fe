@@ -1,4 +1,4 @@
-using backend.Data;
+﻿using backend.Data;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +18,8 @@ namespace backend.Controllers
             _context = context;
         }
 
-        [HttpGet("open-trips-page")]
-        public IActionResult OpenTripsPage(int userId)
+        [HttpGet("openTripsPage")]
+        public IActionResult show(int userId)
         {
             Console.WriteLine("Redirecting");
             return Redirect($"http://localhost:3000/trips?userId={userId}");
@@ -37,8 +37,44 @@ namespace backend.Controllers
         private async Task<List<Trip>> selectTrips(int userId)
         {
             return await _context.Trips
-            .Where(t => t.OwnerId == userId || t.Travelers.Any(tr => tr.Id == userId))
-            .ToListAsync();
+                .Include(t => t.Travelers)
+                .Where(t => t.OwnerId == userId || t.Travelers.Any(tr => tr.Id == userId))
+                .ToListAsync();
+        }
+
+        [HttpPost("user/{userId}")]
+        public async Task<IActionResult> createTrip(int userId, Trip trip)
+        {
+            Console.WriteLine("Creating a trip");
+            var (isValid, message) = validate(trip);
+            if (!isValid)
+                return BadRequest(message);
+
+            trip.OwnerId = userId;
+            trip.DayCount = (trip.End.Value-trip.Start.Value).Days;
+            _context.Trips.Add(trip);
+            await _context.SaveChangesAsync();
+
+            Console.WriteLine("Wrote into database");
+            return show(userId);
+        }
+
+        private (bool,string) validate(Trip trip)
+        {
+            if (string.IsNullOrWhiteSpace(trip.Name))
+                return (false, "Pavadinimas yra privalomas.");
+
+            if (trip.Start == null)
+                return (false, "Nurodykite kelionės pradžią");
+
+            if (trip.End == null)
+                return (false, "Nurodykite kelionės pabaigą");
+
+            if (trip.End.Value.Date < trip.Start.Value.Date)
+                return (false, "Kelionės pabaiga negali būti anksčiau nei pradžia.");
+            
+
+            return (true,"");
         }
     }
 }

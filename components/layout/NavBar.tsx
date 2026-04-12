@@ -34,7 +34,7 @@ export function Navbar() {
 						Lankytinos vietos
 					</Link>
 					<Link
-						href={`${backend_url}/trip/open-trips-page?userId=${user_id}`}
+						href={`${backend_url}/trip/openTripsPage?userId=${user_id}`}
 						className={`transition-colors ${
 							isTripsPage ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'
 						}`}
