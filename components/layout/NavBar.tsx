@@ -4,8 +4,7 @@ import { MapPin, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-let user_id = 1
-let backend_url = "http://localhost:5011"
+const user_id = 1;
 
 export function Navbar() {
 	const pathname = usePathname();
@@ -31,12 +30,12 @@ export function Navbar() {
 								: 'text-foreground/70 hover:text-foreground'
 						}`}
 					>
-						Lankytinos vietos
+						Pradžia
 					</Link>
 					<Link
-						href={`${backend_url}/trip/openTripsPage?userId=${user_id}`}
-						className={`transition-colors ${
-							isTripsPage ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'
+						href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/openTripsPage?userId=${user_id}`}
+						className={`font-['Outfit'] font-semibold transition-colors ${
+							isTripsPage ? 'text-primary border-b-2 border-primary pb-1' : 'text-foreground/70 hover:text-foreground'
 						}`}
 					>
 						Mano kelionės
