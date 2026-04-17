@@ -19,20 +19,6 @@ namespace backend.Controllers
             _context = context;
         }
 
-        [HttpGet("openTripsPage")]
-        public IActionResult showTripsPage(int userId)
-        {
-            Console.WriteLine("Redirecting");
-            return Redirect($"http://localhost:3000/trips?userId={userId}");
-        }
-
-        [HttpGet("openTripPage")]
-        public IActionResult showTripPage(int tripId)
-        {
-            Console.WriteLine("Redirecting");
-            return Redirect($"http://localhost:3000/trip?tripId={tripId}");
-        }
-
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<List<Trip>>> getTrips(int userId)
         {
@@ -78,12 +64,11 @@ namespace backend.Controllers
                 return BadRequest(message);
 
             trip.OwnerId = userId;
-            //trip.DayCount = (trip.End.Value-trip.Start.Value).Days;
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
 
             Console.WriteLine("Wrote into database");
-            return showTripsPage(userId);
+            return Ok(trip);
         }
 
         private (bool,string) validate(Trip trip)
@@ -127,11 +112,11 @@ namespace backend.Controllers
             if (trip == null)
                 return NotFound();
 
-            trip.Name = dto.Name;
-
             var (isValid, message) = validate(trip);
             if (!isValid)
                 return BadRequest(message);
+
+            trip.Name = dto.Name;
 
             await _context.SaveChangesAsync();
 
@@ -168,8 +153,8 @@ namespace backend.Controllers
             if (trip == null)
                 return NotFound();
 
-            if (trip.Start != null)
-                trip.End = dto.End;
+            
+            trip.End = dto.End;
 
             await _context.SaveChangesAsync();
 

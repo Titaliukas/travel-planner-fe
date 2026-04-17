@@ -8,7 +8,7 @@ import { PlacesList } from '@/app/trip/components/PlacesList';
 import { ParticipantsCard } from '@/app/trip/components/ParticipantsCard';
 import { AccommodationCard } from '@/app/trip/components/AccommodationCard';
 import { PackingListCard } from '@/app/trip/components/PackingListCard';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Trip from '@/types/Trip';
 import { TripDays } from '@/app/trip/components/TripDays';
 import DeleteModal from '@/app/trip/components/DeleteModal';
@@ -155,7 +155,7 @@ export default function TripDetailPage() {
 		return 'Baigta';
 	}
 
-	async function handleTripStart(tripId: string) {
+	async function startTrip(tripId: string) {
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/${tripId}/start`, {
 			method: 'PATCH',
 			headers: { 'Content-Type': 'application/json' },
@@ -165,7 +165,7 @@ export default function TripDetailPage() {
 		});
 	}
 
-	async function handleTripEnd(tripId: string) {
+	async function endTrip(tripId: string) {
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/${tripId}/end`, {
 			method: 'PATCH',
 			headers: { 'Content-Type': 'application/json' },
@@ -175,22 +175,28 @@ export default function TripDetailPage() {
 		});
 	}
 
-	async function handleTripPause(tripId: string) {
+	async function pauseTrip(tripId: string) {
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/${tripId}/pause`, {
 			method: 'PATCH',
 		});
 	}
 
-	async function handleTripCancel(tripId: string) {
+	async function cancelTrip(tripId: string) {
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/${tripId}/cancel`, {
 			method: 'PATCH',
 		});
 	}
 
-	async function handleTripRestore(tripId: string) {
+	async function restoreTrip(tripId: string) {
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/${tripId}/restore`, {
 			method: 'PATCH',
 		});
+	}
+
+	const router = useRouter();
+
+	function openTripsPage() {
+		router.push(`/trips?userId=${user_id}`);
 	}
 
 	const searchParams = useSearchParams();
@@ -238,12 +244,9 @@ export default function TripDetailPage() {
 			<div className='mt-16 max-w-7xl mx-auto px-8 py-6'>
 				{/* Breadcrumb */}
 				<div className='flex items-center gap-2 text-sm text-muted-foreground mb-6'>
-					<a
-						href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/openTripsPage?userId=${user_id}`}
-						className='hover:text-foreground transition-colors'
-					>
+					<button onClick={openTripsPage} className='hover:text-foreground transition-colors'>
 						Mano kelionės
-					</a>
+					</button>
 					<ChevronRight className='w-4 h-4' />
 					<span className='text-foreground font-semibold'>{trip.Name}</span>
 				</div>
@@ -318,7 +321,7 @@ export default function TripDetailPage() {
 						{getTripStatus(trip) !== 'Atšaukta' ? (
 							<button
 								onClick={async () => {
-									await handleTripCancel(trip_id);
+									await cancelTrip(trip_id);
 									fetchTrip(trip_id);
 								}}
 								className='flex items-center gap-2 px-8 py-3 bg-destructive text-primary-foreground rounded-lg hover:bg-destructive/80 transition-colors shadow-lg shadow-primary/20 font-semibold hover:cursor-pointer'
@@ -329,7 +332,7 @@ export default function TripDetailPage() {
 						) : (
 							<button
 								onClick={async () => {
-									await handleTripRestore(trip_id);
+									await restoreTrip(trip_id);
 									fetchTrip(trip_id);
 								}}
 								className='flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-lg  transition-colors shadow-lg shadow-primary/20 font-semibold hover:bg-primary/90 hover:cursor-pointer'
@@ -342,7 +345,7 @@ export default function TripDetailPage() {
 					{getTripStatus(trip) === 'Planuojama' || getTripStatus(trip) === 'Sustabdyta' ? (
 						<button
 							onClick={async () => {
-								await handleTripStart(trip_id);
+								await startTrip(trip_id);
 								fetchTrip(trip_id);
 							}}
 							className='flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 font-semibold hover:cursor-pointer'
@@ -354,7 +357,7 @@ export default function TripDetailPage() {
 						<div className='flex gap-2'>
 							<button
 								onClick={async () => {
-									await handleTripPause(trip_id);
+									await pauseTrip(trip_id);
 									fetchTrip(trip_id);
 								}}
 								className='flex items-center gap-2 px-8 py-3 bg-warning text-primary-foreground rounded-lg hover:bg-warning/70 transition-colors shadow-lg shadow-primary/20 font-semibold hover:cursor-pointer'
@@ -364,7 +367,7 @@ export default function TripDetailPage() {
 							</button>
 							<button
 								onClick={async () => {
-									await handleTripEnd(trip_id);
+									await endTrip(trip_id);
 									fetchTrip(trip_id);
 								}}
 								className='flex items-center gap-2 px-8 py-3 bg-destructive text-primary-foreground rounded-lg hover:bg-destructive/80 transition-colors shadow-lg shadow-primary/20 font-semibold hover:cursor-pointer'

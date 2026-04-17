@@ -2,7 +2,7 @@
 
 import { MapPin, User } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const user_id = 1;
 
@@ -10,6 +10,15 @@ export function Navbar() {
 	const pathname = usePathname();
 	const isAttractionsPage = pathname === '/';
 	const isTripsPage = pathname.startsWith('/trip');
+	const router = useRouter();
+
+	function openHomePage() {
+		router.push('/');
+	}
+
+	function openTripsPage() {
+		router.push(`/trips?userId=${user_id}`);
+	}
 
 	return (
 		<nav className='fixed top-0 left-0 right-0 z-50 bg-card border-b border-border'>
@@ -22,8 +31,8 @@ export function Navbar() {
 
 				{/* Navigation Links */}
 				<div className='flex items-center gap-8'>
-					<Link
-						href='/'
+					<button
+						onClick={openHomePage}
 						className={`font-['Outfit'] font-semibold transition-colors ${
 							isAttractionsPage
 								? 'text-primary border-b-2 border-primary pb-1'
@@ -31,15 +40,15 @@ export function Navbar() {
 						}`}
 					>
 						Pradžia
-					</Link>
-					<Link
-						href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/trip/openTripsPage?userId=${user_id}`}
+					</button>
+					<button
+						onClick={openTripsPage}
 						className={`font-['Outfit'] font-semibold transition-colors ${
 							isTripsPage ? 'text-primary border-b-2 border-primary pb-1' : 'text-foreground/70 hover:text-foreground'
 						}`}
 					>
 						Mano kelionės
-					</Link>
+					</button>
 				</div>
 
 				{/* User Profile */}

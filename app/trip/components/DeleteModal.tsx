@@ -17,6 +17,10 @@ export default function DeleteModal({ tripId, userId, onClose }: DeleteModalProp
 
 	const router = useRouter();
 
+	function openTripsPage() {
+		router.push(`/trips?userId=${userId}`);
+	}
+
 	async function handleDelete() {
 		setSubmitting(true);
 		setError(null);
@@ -32,8 +36,7 @@ export default function DeleteModal({ tripId, userId, onClose }: DeleteModalProp
 				return;
 			}
 
-			// success → close modal (or redirect if you still want)
-			router.push(`/trips?userId=${userId}`);
+			openTripsPage();
 		} catch {
 			setError('Nepavyko ištrinti kelionės');
 		} finally {
