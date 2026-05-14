@@ -1,193 +1,130 @@
 'use client';
 
-import { AttractionListItem } from '@/app/sights/components/AttractionListItem';
-import { useState } from 'react';
+import { SightsListItem } from '@/app/sights/components/SightsListItem';
+import { SightSkeletonCard } from '@/app/sights/components/SightSkeletonCard';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { useEffect, useMemo, useState } from 'react';
 
-interface Attraction {
-	id: string;
-	name: string;
-	city: string;
-	address: string;
-	image: string;
-	category: string;
-	match: number;
-	rating: number;
-	reviewCount: number;
-	duration: string;
-	description: string;
-	fullDescription: string;
-	tags: string[];
-	schedule: { day: string; hours: string }[];
-	coordinates: { lat: number; lng: number };
+interface Sight {
+	Id: string;
+	Name: string;
+	City: string;
+	Address: string;
+	PhotoUrl: string;
+	Duration: number;
+	Description: string;
+	FullDescription: string;
+	CoordinateX: number;
+	CoordinateY: number;
 }
 
-const mockAttractions: Attraction[] = [
-	{
-		id: '1',
-		name: 'Gedimino kalnas',
-		city: 'Vilnius, Vilniaus apskritis',
-		address: 'Arsenalo g. 5, Vilnius',
-		image: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Gedimino_pilis_by_Augustas_Didzgalvis.jpg',
-		category: 'Istorija',
-		match: 95,
-		rating: 4.8,
-		reviewCount: 3247,
-		duration: '~1 val.',
-		description: 'Simbolinė Vilniaus vieta su Gedimino bokštu ir nuostabia panorama.',
-		fullDescription:
-			'Gedimino kalnas – vienas svarbiausių Vilniaus simbolių. Ant kalno stūkso Gedimino pilies bokštas, iš kurio atsiveria nuostabi senojo Vilniaus panorama. Kalnas yra archeologinis, istorinis ir kultūrinis paminklas, pritraukiantis tūkstančius lankytojų kasmet.',
-		tags: ['Istorija', 'Bokštas', 'Panorama'],
-		schedule: [
-			{ day: 'Antradienis–Sekmadienis', hours: '10:00–18:00' },
-			{ day: 'Pirmadienis', hours: 'Uždaryta' },
-		],
-		coordinates: { lat: 54.6869, lng: 25.2903 },
-	},
-	{
-		id: '2',
-		name: 'Kryžių kalnas',
-		city: 'Šiauliai, Šiaulių apskritis',
-		address: 'Jurgaičių kaimas',
-		image: 'https://www.turistopasaulis.lt/wp-content/uploads/2013/10/kry%C5%BEi%C5%B3-kalnas-05.jpg',
-		category: 'Religija',
-		match: 92,
-		rating: 4.9,
-		reviewCount: 2841,
-		duration: '~1 val.',
-		description: 'Unikalus piligrimystės centras su tūkstančiais kryžių.',
-		fullDescription:
-			'Kryžių kalnas – vienas žinomiausių Lietuvos piligrimystės centrų, pritraukiantis tūkstančius lankytojų kasmet. Šis unikalus religinis kompleksas, kurį sudaro dešimtys tūkstančių kryžių, liudija lietuvių tautos tikėjimą ir pasiaukojimą. Vieta įtraukta į UNESCO paveldą.',
-		tags: ['Religija', 'Piligrimystė', 'UNESCO'],
-		schedule: [{ day: 'Kasdien', hours: '24/7' }],
-		coordinates: { lat: 56.0154, lng: 23.4175 },
-	},
-	{
-		id: '3',
-		name: 'Trijų kryžių kalnas',
-		city: 'Vilnius, Vilniaus apskritis',
-		address: 'Kalnai parkas, Vilnius',
-		image: 'https://tobuladovana.lt/images/blog/5/triju-kryziu-kalnas.jpeg',
-		category: 'Istorija',
-		match: 88,
-		rating: 4.7,
-		reviewCount: 1892,
-		duration: '~1 val.',
-		description: 'Monumentalus paminklas su nuostabia miesto panorama.',
-		fullDescription:
-			'Trijų kryžių kalnas – vienas populiariausių Vilniaus apžvalgos taškų. Ant kalno stovi trys balti betoniniai kryžiai, pastatyti 1989 metais vietoje 1916 m. pastatytų medinių kryžių. Nuo kalno atsiveria įspūdinga Vilniaus senamiestis panorama.',
-		tags: ['Istorija', 'Paminklas', 'Panorama'],
-		schedule: [{ day: 'Kasdien', hours: '24/7' }],
-		coordinates: { lat: 54.6884, lng: 25.2992 },
-	},
-	{
-		id: '4',
-		name: 'Trakų pilis',
-		city: 'Trakai, Vilniaus apskritis',
-		address: 'Karaimų g. 41, Trakai',
-		image: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Traku_pilis_by_Augustas_Didzgalvis.jpg',
-		category: 'Istorija',
-		match: 95,
-		rating: 4.8,
-		reviewCount: 4847,
-		duration: '~2 val.',
-		description: 'Vienas gražiausių Lietuvos pilių kompleksų, esantis saloje Galvės ežere.',
-		fullDescription:
-			'Trakų salos pilis – vienas iš labiausiai turistų lankomas objektų Lietuvoje. Ši XIV a. pabaigoje pastatyta gotinė pilis yra vienintelė vandeniu apsuptų pilių Rytų Europoje. Čia įsikūręs Trakų istorijos muziejus, vyksta įvairūs renginiai ir festivaliai.',
-		tags: ['Istorija', 'Pilis', 'Muziejus'],
-		schedule: [
-			{ day: 'Antradienis–Sekmadienis', hours: '10:00–18:00' },
-			{ day: 'Pirmadienis', hours: 'Uždaryta' },
-		],
-		coordinates: { lat: 54.6524, lng: 24.9347 },
-	},
-	{
-		id: '5',
-		name: 'Puntuko akmuo',
-		city: 'Anykščiai, Utenos apskritis',
-		address: 'Puntuko akmens takas, Anykščiai',
-		image: 'https://upload.wikimedia.org/wikipedia/lt/b/b6/LT_Anyksciai_Puntukas_01.jpg',
-		category: 'Gamta',
-		match: 85,
-		rating: 4.6,
-		reviewCount: 967,
-		duration: '~1 val.',
-		description: 'Didžiausias riedulys Lietuvoje, apipintas legendomis.',
-		fullDescription:
-			'Puntuko akmuo – didžiausias riedulys Lietuvoje, kurio tūris siekia 265 kubinių metrų. Šis unikalus gamtos paminklas apipintas daugybe legendų ir pasakojimų. Akmuo yra populiari turistų lankoma vieta Anykščių rajone.',
-		tags: ['Gamta', 'Riedulys', 'Legendos'],
-		schedule: [{ day: 'Kasdien', hours: '24/7' }],
-		coordinates: { lat: 55.5333, lng: 25.1167 },
-	},
-];
+const mapContainerStyle = {
+	width: '100%',
+	height: '100%',
+};
 
-export default function AttractionsPage() {
-	const [selectedAttraction, setSelectedAttraction] = useState<Attraction | null>(null);
+export default function SightPage() {
+	const [selectedSight, setSelectedSight] = useState<Sight | null>(null);
+	const [sights, setSights] = useState<Sight[]>([]);
+	const [loading, setLoading] = useState(true);
 
-	const handleAttractionSelect = (attraction: Attraction) => {
-		setSelectedAttraction(attraction);
+	const selectSight = (sight: Sight) => {
+		setSelectedSight(sight);
 	};
 
-	const mapCenter = selectedAttraction
-		? `${selectedAttraction.coordinates.lat},${selectedAttraction.coordinates.lng}`
-		: '55.1694,23.8813'; // Center of Lithuania
+	//getSights()
+	useEffect(() => {
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sight`)
+			.then((r) => r.json())
+			.then((data) => {
+				setSights(data);
+				setLoading(false);
+			})
+			.catch(() => setLoading(false));
+	}, []);
+
+	const createMarkers = () => {
+		return sights.map((sight) => (
+			<Marker
+				key={sight.Id}
+				position={{
+					lat: sight.CoordinateY,
+					lng: sight.CoordinateX,
+				}}
+				title={sight.Name}
+				onClick={() => selectSight(sight)}
+			/>
+		));
+	};
+
+	const centerMap = (sight?: Sight | null) =>
+		sight
+			? {
+					lat: sight.CoordinateY,
+					lng: sight.CoordinateX,
+				}
+			: {
+					lat: 55.1694,
+					lng: 23.8813,
+				};
+
+	const center = useMemo(() => centerMap(selectedSight), [selectedSight]);
 
 	return (
 		<div className='min-h-screen'>
-			{/* Main Content - Split View */}
 			<div className='mt-16 flex h-[calc(100vh-4rem)]'>
-				{/* Left Half - Attraction List */}
+				{/* Left Side */}
 				<div className='w-1/2 overflow-y-auto border-r border-border'>
 					<div className='p-6'>
-						{/* Page Header */}
 						<div className='mb-6'>
 							<h1 className='mb-2'>Lankytinos vietos</h1>
 							<p className='text-muted-foreground'>Raskite įdomių vietų savo kelionei</p>
 						</div>
 
-						{/* Results count */}
 						<p className='text-sm text-muted-foreground mb-4'>
-							Rasta <span className='font-semibold text-foreground'>5</span> vietos
+							Rasta <span className='font-semibold text-foreground'>{sights.length}</span> vietos
 						</p>
 
-						{/* Attraction List */}
 						<div className='space-y-3'>
-							{mockAttractions.map((attraction) => (
-								<AttractionListItem
-									key={attraction.id}
-									id={attraction.id}
-									name={attraction.name}
-									city={attraction.city}
-									address={attraction.address}
-									image={attraction.image}
-									category={attraction.category}
-									rating={attraction.rating}
-									reviewCount={attraction.reviewCount}
-									duration={attraction.duration}
-									description={attraction.description}
-									fullDescription={attraction.fullDescription}
-									tags={attraction.tags}
-									schedule={attraction.schedule}
-									onSelect={() => handleAttractionSelect(attraction)}
-								/>
-							))}
+							{loading
+								? Array.from({ length: 5 }).map((_, i) => <SightSkeletonCard key={i} />)
+								: sights.map((sight) => (
+										<SightsListItem
+											key={sight.Id}
+											id={sight.Id}
+											name={sight.Name}
+											city={sight.City}
+											address={sight.Address}
+											image={sight.PhotoUrl}
+											duration={sight.Duration}
+											description={sight.Description}
+											fullDescription={sight.FullDescription}
+											isExpanded={selectedSight?.Id === sight.Id}
+											onToggle={() => {
+												if (selectedSight?.Id === sight.Id) {
+													setSelectedSight(null);
+												} else {
+													setSelectedSight(sight);
+												}
+											}}
+										/>
+									))}
 						</div>
 					</div>
 				</div>
 
-				{/* Right Half - Google Maps */}
+				{/* Right Side - Google Map */}
 				<div className='w-1/2 relative'>
-					<iframe
-						src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&center=${mapCenter}&zoom=14&maptype=roadmap`}
-						className='w-full h-full border-0'
-						allowFullScreen
-						loading='lazy'
-						referrerPolicy='no-referrer-when-downgrade'
-						title='Google Maps'
-					/>
-					{selectedAttraction && (
+					<LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+						<GoogleMap mapContainerStyle={mapContainerStyle} center={center} zoom={selectedSight ? 14 : 7}>
+							{createMarkers()}
+						</GoogleMap>
+					</LoadScript>
+
+					{selectedSight && (
 						<div className='absolute top-4 left-4 right-4 bg-card rounded-lg shadow-lg p-4 border border-border'>
-							<h3 className='mb-1'>{selectedAttraction.name}</h3>
-							<p className='text-sm text-muted-foreground'>{selectedAttraction.address}</p>
+							<h3 className='mb-1'>{selectedSight.Name}</h3>
+							<p className='text-sm text-muted-foreground'>{selectedSight.Address}</p>
 						</div>
 					)}
 				</div>
