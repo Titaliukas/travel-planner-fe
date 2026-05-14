@@ -41,5 +41,18 @@ public class AppDbContext : DbContext
 
             entity.HasIndex(ui => new { ui.UserId, ui.InterestId }).IsUnique();
         });
+
+        modelBuilder.Entity<Interest>().HasData(
+            new Interest { Id = 1, Name = "Žygiai" },
+            new Interest { Id = 2, Name = "Plaukimas" },
+            new Interest { Id = 3, Name = "Slidinėjimas" },
+            new Interest { Id = 4, Name = "Fotografija" },
+            new Interest { Id = 5, Name = "Maistas" },
+            new Interest { Id = 6, Name = "Muzika" },
+            new Interest { Id = 7, Name = "Skaitymas" },
+            new Interest { Id = 8, Name = "Viduramžiai" },
+            new Interest { Id = 9, Name = "Sportas" },
+            new Interest { Id = 10, Name = "Menas" }
+        );
     }
 }
