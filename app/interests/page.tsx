@@ -5,7 +5,7 @@ import { Interest, UserInterest, SaveInterestDto } from './types';
 import InterestForm from './components/InterestForm';
 
 export default function InterestsPage() {
-    const userId = 1; // Pakeisti pagal prisijungusį vartotoją
+    const userId = 1;
     const [formType, setFormType] = useState<'first' | 'edit' | null>(null);
     const [interests, setInterests] = useState<Interest[] | UserInterest[]>([]);
     const [loading, setLoading] = useState(true);

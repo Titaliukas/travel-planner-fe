@@ -43,7 +43,7 @@ public class AppDbContext : DbContext
         });
 
         modelBuilder.Entity<Interest>().HasData(
-            new Interest { Id = 1, Name = "Žygiai" },
+            new Interest { Id = 1, Name = "Gamta" },
             new Interest { Id = 2, Name = "Plaukimas" },
             new Interest { Id = 3, Name = "Slidinėjimas" },
             new Interest { Id = 4, Name = "Fotografija" },
