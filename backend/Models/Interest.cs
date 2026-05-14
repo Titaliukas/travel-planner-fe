@@ -4,5 +4,7 @@ namespace backend.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public List<UserInterest> UserInterests { get; set; } = new();
     }
 }
