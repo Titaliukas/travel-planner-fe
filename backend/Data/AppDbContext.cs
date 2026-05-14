@@ -52,7 +52,7 @@ public class AppDbContext : DbContext
             new Interest { Id = 5, Name = "Maistas" },
             new Interest { Id = 6, Name = "Muzika" },
             new Interest { Id = 7, Name = "Skaitymas" },
-            new Interest { Id = 8, Name = "Viduramžiai" },
+            new Interest { Id = 8, Name = "Istorija" },
             new Interest { Id = 9, Name = "Sportas" },
             new Interest { Id = 10, Name = "Menas" }
         );
