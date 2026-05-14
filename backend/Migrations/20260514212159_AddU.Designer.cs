@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260514212159_AddU")]
+    partial class AddU
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,19 +321,19 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 10,
+                            Id = 2,
                             Mail = "jonas@example.com",
                             Username = "Jonas"
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 3,
                             Mail = "petras@example.com",
                             Username = "Petras"
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 4,
                             Mail = "ona@example.com",
                             Username = "Ona"
                         });

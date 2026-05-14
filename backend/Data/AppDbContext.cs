@@ -133,5 +133,11 @@ public class AppDbContext : DbContext
                 .HasForeignKey(r => r.SightId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<User>().HasData(
+            new User { Id = 10, Username = "Jonas", Mail = "jonas@example.com" },
+            new User { Id = 11, Username = "Petras", Mail = "petras@example.com" },
+            new User { Id = 12, Username = "Ona", Mail = "ona@example.com" }
+        );
     }
 }

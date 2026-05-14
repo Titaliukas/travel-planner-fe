@@ -212,5 +212,80 @@ namespace backend.Controllers
 
             return Ok(trip);
         }
+
+        // ========== MANO PRIDĖTOS FUNKCIJOS ==========
+
+        // 1. Gauti visus kelionės keliautojus
+        [HttpGet("{tripId}/travelers")]
+        public async Task<ActionResult<List<User>>> getTripTravelers(int tripId)
+        {
+            var trip = await _context.Trips
+                .Include(t => t.Travelers)
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            if (trip == null)
+                return NotFound("Kelionė nerasta");
+
+            return Ok(trip.Travelers);
+        }
+
+        // 2. Gauti visus sistemos vartotojus
+        [HttpGet("users/all")]
+        public async Task<ActionResult<List<User>>> getAllUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+            return Ok(users);
+        }
+
+        // 3. Pridėti pasirinktus keliautojus į kelionę
+        [HttpPost("{tripId}/travelers")]
+        public async Task<IActionResult> addTravelersToTrip(int tripId, [FromBody] List<int> userIds)
+        {
+            var trip = await _context.Trips
+                .Include(t => t.Travelers)
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            if (trip == null)
+                return NotFound("Kelionė nerasta");
+
+            var usersToAdd = await _context.Users
+                .Where(u => userIds.Contains(u.Id))
+                .ToListAsync();
+
+            foreach (var user in usersToAdd)
+            {
+                if (!trip.Travelers.Any(t => t.Id == user.Id))
+                {
+                    trip.Travelers.Add(user);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(trip.Travelers);
+        }
+
+        // 4. Pašalinti pasirinktus keliautojus iš kelionės
+        [HttpDelete("{tripId}/travelers")]
+        public async Task<IActionResult> removeTravelersFromTrip(int tripId, [FromBody] List<int> userIds)
+        {
+            var trip = await _context.Trips
+                .Include(t => t.Travelers)
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            if (trip == null)
+                return NotFound("Kelionė nerasta");
+
+            var usersToRemove = trip.Travelers
+                .Where(t => userIds.Contains(t.Id))
+                .ToList();
+
+            foreach (var user in usersToRemove)
+            {
+                trip.Travelers.Remove(user);
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(trip.Travelers);
+        }
     }
 }
