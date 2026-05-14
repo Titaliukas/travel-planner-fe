@@ -17,7 +17,8 @@ namespace backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Duration = table.Column<TimeOnly>(type: "time", nullable: false),
+                    Distance = table.Column<double>(type: "float", nullable: false),
+                    Duration = table.Column<TimeSpan>(type: "time", nullable: false),
                     StartingLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EndingLocation = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -32,7 +33,9 @@ namespace backend.Migrations
                 {
                     RouteId = table.Column<int>(type: "int", nullable: false),
                     SightId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Day = table.Column<int>(type: "int", nullable: false),
+                    VisitOrder = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

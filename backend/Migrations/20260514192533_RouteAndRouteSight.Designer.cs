@@ -12,7 +12,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260514185355_RouteAndRouteSight")]
+    [Migration("20260514192533_RouteAndRouteSight")]
     partial class RouteAndRouteSight
     {
         /// <inheritdoc />
@@ -117,7 +117,10 @@ namespace backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<TimeOnly>("Duration")
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
+
+                    b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
 
                     b.Property<string>("EndingLocation")
@@ -139,7 +142,13 @@ namespace backend.Migrations
                     b.Property<int>("SightId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
                     b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VisitOrder")
                         .HasColumnType("int");
 
                     b.HasKey("RouteId", "SightId");
