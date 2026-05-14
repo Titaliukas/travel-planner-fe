@@ -16,6 +16,10 @@ export default function Home() {
 		router.push(`/sights`);
 	}
 
+	function openInterestsPage() {
+		router.push(`/interests`);
+	}
+
 	return (
 		<main className='flex-1 pt-16'>
 			<div className='max-w-5xl mx-auto px-6 py-16'>
@@ -62,6 +66,29 @@ export default function Home() {
 						</h2>
 						<p className='text-xs text-muted-foreground leading-relaxed'>
 							Naršyk lankytinas vietas ir pridėk jas prie kelionių
+						</p>
+
+						<div className='flex justify-end mt-4 pt-3 border-t border-border'>
+							<ArrowRight className='w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all' />
+						</div>
+					</button>
+
+					{/* Interests */}
+					<button
+						onClick={() => openInterestsPage()}
+						className='relative bg-card border border-border rounded-xl p-6 hover:border-border/60 hover:shadow-sm transition-all cursor-pointer overflow-hidden text-left group'
+					>
+						<div className='absolute top-0 left-0 right-0 h-0.5 bg-blue-500' />
+
+						<div className='mb-4 mt-1 w-10 h-10 rounded-lg bg-muted flex items-center justify-center'>
+							<Eye className='w-5 h-5 text-foreground/70' />
+						</div>
+
+						<h2 className="font-['Outfit'] font-semibold text-base text-foreground leading-snug mb-1">
+							Pomėgių anketa
+						</h2>
+						<p className='text-xs text-muted-foreground leading-relaxed'>
+							Įvertink savo pomėgius
 						</p>
 
 						<div className='flex justify-end mt-4 pt-3 border-t border-border'>

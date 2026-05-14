@@ -13,5 +13,6 @@ namespace backend.Models
         public User? Owner { get; set; }
         public List<User> Travelers {  get; set; } = [];
 
+        public List<Sight> Sights { get; set; } = new();
     }
 }
