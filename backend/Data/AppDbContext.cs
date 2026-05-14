@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
     public DbSet<Interest> Interests => Set<Interest>();
     public DbSet<UserInterest> UserInterests => Set<UserInterest>();
     public DbSet<Sight> Sights { get; set; }
+    public DbSet<RouteSight> RouteSights { get; set; }
+    public DbSet<Models.Route> Routes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -118,5 +120,19 @@ public class AppDbContext : DbContext
             PhotoUrl = "https://upload.wikimedia.org/wikipedia/lt/b/b6/LT_Anyksciai_Puntukas_01.jpg"
         }
     );
-    }
+		modelBuilder.Entity<RouteSight>()
+			.HasKey(rs => new { rs.RouteId, rs.SightId });
+
+        modelBuilder.Entity<RouteSight>()
+            .HasOne(rs => rs.Route)
+            .WithMany(r => r.RouteSights)
+            .HasForeignKey(rs => rs.RouteId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+		modelBuilder.Entity<RouteSight>()
+			.HasOne(rs => rs.Sight)
+			.WithMany(s => s.RouteSights)
+			.HasForeignKey(rs => rs.SightId);
+	}
 }

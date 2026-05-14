@@ -12,5 +12,6 @@ namespace backend.Models
 		public double CoordinateX { get; set; } 
 		public double CoordinateY { get; set; } 
 		public string PhotoUrl { get; set; }
+		public ICollection<RouteSight> RouteSights { get; set; }
 	}
 }
