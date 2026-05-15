@@ -12,6 +12,7 @@ namespace backend.Models
         public int OwnerId { get; set; }
         public User? Owner { get; set; }
         public List<User> Travelers {  get; set; } = [];
+        public List<Route> Routes { get; set; } = [];
 
     }
 }

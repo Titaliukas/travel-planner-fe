@@ -8,5 +8,7 @@
 		public string? StartingLocation { get; set; }
 		public string? EndingLocation { get; set; }
 		public ICollection<RouteSight> RouteSights { get; set; }
+		public Trip Trip { get; set; }
+		public int TripId { get; set; }
 	}
 }
