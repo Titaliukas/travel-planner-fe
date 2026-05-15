@@ -64,6 +64,12 @@ namespace backend.Controllers
                 return BadRequest(message);
 
             trip.OwnerId = userId;
+            var owner = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (owner != null)
+            {
+                trip.Travelers.Add(owner);
+                trip.Owner = owner;
+            }
             _context.Trips.Add(trip);
             await _context.SaveChangesAsync();
 

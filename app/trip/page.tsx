@@ -254,10 +254,11 @@ export default function TripDetailPage() {
 				{/* Trip Header */}
 				<div className='mb-6'>
 					<TripHeader
+						tripId={trip.Id}
 						title={trip.Name}
 						status={getTripStatus(trip)}
 						placesCount={8}
-						participants={3}
+						participants={trip.Travelers?.length ?? 0}
 						hasAccommodation={true}
 						onUpdate={() => setUpdateOpen(true)}
 					/>
@@ -283,7 +284,7 @@ export default function TripDetailPage() {
 						{/* Right Column - 40% */}
 						<div className='col-span-2 space-y-6'>
 							{/* Participants */}
-							<ParticipantsCard participants={participants} />
+							<ParticipantsCard participants={trip.Travelers ?? []} />
 
 							{/* Accommodation */}
 							<AccommodationCard hotel={hotel} />

@@ -117,17 +117,17 @@ export function TripCard({ trip }: { trip: Trip }) {
 					<span className='text-xs text-muted-foreground'>d.</span>
 				</div>
 
-				{travelers.length === 0 ? (
+				{travelers.length === 1 ? (
 					<span className='text-xs text-muted-foreground'>Tik tu</span>
 				) : (
 					<div className='flex items-center'>
 						{visibleTravelers.map((user, i) => (
 							<div
 								key={user.Id}
-								title={user.Name}
+								title={user.Username}
 								className={`w-7 h-7 rounded-full text-[10px] font-medium flex items-center justify-center border-2 border-card ${AVATAR_COLORS[i % AVATAR_COLORS.length]} ${i > 0 ? '-ml-2' : ''}`}
 							>
-								{initials(user.Name)}
+								{initials(user.Username)}
 							</div>
 						))}
 						{extraCount > 0 && (

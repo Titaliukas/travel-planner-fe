@@ -1,6 +1,8 @@
 import { MapPin, Users, Hotel, Edit, UserPlus, Route } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface TripHeaderProps {
+	tripId: number;
 	title: string;
 	status: string;
 	//dateRange: string;
@@ -18,7 +20,21 @@ const statusStyles: Record<string, string> = {
 	Sustabdyta: 'bg-warning/50 text-white',
 };
 
-export function TripHeader({ title, status, placesCount, participants, hasAccommodation, onUpdate }: TripHeaderProps) {
+export function TripHeader({
+	tripId,
+	title,
+	status,
+	placesCount,
+	participants,
+	hasAccommodation,
+	onUpdate,
+}: TripHeaderProps) {
+	const router = useRouter();
+
+	function openTravellers(tripId: number) {
+		router.push(`/travellers?tripId=${tripId}`);
+	}
+
 	return (
 		<div className='bg-linear-to-r from-[#1A6B3C] to-[#2D8A55] rounded-xl p-8 text-white shadow-lg shadow-primary/20'>
 			{/* Title and Status */}
@@ -60,7 +76,10 @@ export function TripHeader({ title, status, placesCount, participants, hasAccomm
 					<Edit className='w-4 h-4' />
 					<span>Redaguoti</span>
 				</button>
-				<button className='flex items-center gap-2 px-4 py-2 border-2 border-white/30 text-white rounded-lg hover:bg-white/10 transition-colors'>
+				<button
+					onClick={() => openTravellers(tripId)}
+					className='flex items-center gap-2 px-4 py-2 border-2 border-white/30 text-white rounded-lg hover:bg-white/10 transition-colors'
+				>
 					<UserPlus className='w-4 h-4' />
 					<span>Pridėti dalyvį</span>
 				</button>
