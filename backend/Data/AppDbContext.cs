@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<Sight> Sights { get; set; }
     public DbSet<RouteSight> RouteSights { get; set; }
     public DbSet<Models.Route> Routes { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -145,5 +146,20 @@ public class AppDbContext : DbContext
             .HasOne(rs => rs.Trip)
             .WithMany(s => s.Routes)
             .HasForeignKey(r => r.TripId);
+
+        modelBuilder.Entity<Rating>(entity =>
+        {
+            entity.HasKey(r => r.Id);
+    
+            entity.HasOne(r => r.User)
+                .WithMany(u => u.Ratings)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+    
+            entity.HasOne(r => r.Sight)
+                .WithMany(s => s.Ratings)
+                .HasForeignKey(r => r.SightId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 	}
 }

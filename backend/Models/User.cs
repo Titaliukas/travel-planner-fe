@@ -9,5 +9,7 @@
         public List<Trip> OwnedTrips { get; set; } = new();
         public List<Trip> ParticipantTrips { get; set; } = new();
         public List<UserInterest> UserInterests { get; set; } = new();
+
+        public List<Rating> Ratings { get; set; } = new();
     }
 }

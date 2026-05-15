@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260515095444_merger_route_and_interests")]
-    partial class merger_route_and_interests
+    [Migration("20260515135256_Ratings")]
+    partial class Ratings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,6 +107,35 @@ namespace backend.Migrations
                             Id = 10,
                             Name = "Menas"
                         });
+                });
+
+            modelBuilder.Entity("backend.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SightId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SightId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("backend.Models.Route", b =>
@@ -396,6 +425,25 @@ namespace backend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("backend.Models.Rating", b =>
+                {
+                    b.HasOne("backend.Models.Sight", "Sight")
+                        .WithMany("Ratings")
+                        .HasForeignKey("SightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sight");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("backend.Models.Route", b =>
                 {
                     b.HasOne("backend.Models.Trip", "Trip")
@@ -468,6 +516,8 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Sight", b =>
                 {
+                    b.Navigation("Ratings");
+
                     b.Navigation("RouteSights");
                 });
 
@@ -479,6 +529,8 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.User", b =>
                 {
                     b.Navigation("OwnedTrips");
+
+                    b.Navigation("Ratings");
 
                     b.Navigation("UserInterests");
                 });
