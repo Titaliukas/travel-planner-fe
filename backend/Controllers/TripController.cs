@@ -293,5 +293,25 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return Ok(trip.Travelers);
         }
+
+        [HttpPost("{tripId}/sight/{sightId}")]
+        public async Task<IActionResult> AddSight(int tripId, int sightId)
+        {
+            var trip = await _context.Trips
+                .Include(t => t.Routes)
+                    .ThenInclude(r => r.RouteSights)
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            if (trip == null) return NotFound("Trip not found");
+
+            var sight = await _context.Sights.FirstOrDefaultAsync(s => s.Id == sightId);
+
+            if (sight == null) return NotFound("Sight not found");
+
+            trip.AddSight(sight);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
