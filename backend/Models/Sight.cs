@@ -13,11 +13,5 @@ namespace backend.Models
 		public double CoordinateY { get; set; } 
 		public string PhotoUrl { get; set; }
 		public ICollection<RouteSight> RouteSights { get; set; }
-
-		public int? TripId { get; set; }
-
-		public Trip Trip { get; set; } = null!;
-
-		public List<Rating> Ratings { get; set; } = new();
 	}
 }

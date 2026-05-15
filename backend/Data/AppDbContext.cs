@@ -15,7 +15,6 @@ public class AppDbContext : DbContext
     public DbSet<Sight> Sights { get; set; }
     public DbSet<RouteSight> RouteSights { get; set; }
     public DbSet<Models.Route> Routes { get; set; }
-    public DbSet<Rating> Ratings => Set<Rating>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -119,21 +118,6 @@ public class AppDbContext : DbContext
             CoordinateX = 25.1167, 
             CoordinateY = 55.5333, 
             PhotoUrl = "https://upload.wikimedia.org/wikipedia/lt/b/b6/LT_Anyksciai_Puntukas_01.jpg"
-        });
-
-        modelBuilder.Entity<Rating>(entity =>
-        {
-            entity.HasKey(r => r.Id);
-    
-            entity.HasOne(r => r.User)
-                .WithMany(u => u.Ratings)
-                .HasForeignKey(r => r.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-    
-            entity.HasOne(r => r.Sight)
-                .WithMany(s => s.Ratings)
-                .HasForeignKey(r => r.SightId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<User>().HasData(
