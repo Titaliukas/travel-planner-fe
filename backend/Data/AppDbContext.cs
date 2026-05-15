@@ -53,7 +53,7 @@ public class AppDbContext : DbContext
             new Interest { Id = 5, Name = "Maistas" },
             new Interest { Id = 6, Name = "Muzika" },
             new Interest { Id = 7, Name = "Skaitymas" },
-            new Interest { Id = 8, Name = "Viduramžiai" },
+            new Interest { Id = 8, Name = "Istorija" },
             new Interest { Id = 9, Name = "Sportas" },
             new Interest { Id = 10, Name = "Menas" }
         );
@@ -118,8 +118,14 @@ public class AppDbContext : DbContext
             CoordinateX = 25.1167, 
             CoordinateY = 55.5333, 
             PhotoUrl = "https://upload.wikimedia.org/wikipedia/lt/b/b6/LT_Anyksciai_Puntukas_01.jpg"
-        }
-    );
+        });
+
+        modelBuilder.Entity<User>().HasData(
+            new User { Id = 10, Username = "Jonas", Mail = "jonas@example.com" },
+            new User { Id = 11, Username = "Petras", Mail = "petras@example.com" },
+            new User { Id = 12, Username = "Ona", Mail = "ona@example.com" }
+        );
+        
 		modelBuilder.Entity<RouteSight>()
 			.HasKey(rs => new { rs.RouteId, rs.SightId });
 

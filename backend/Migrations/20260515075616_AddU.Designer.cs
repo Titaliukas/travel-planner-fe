@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260515075616_AddU")]
+    partial class AddU
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +109,35 @@ namespace backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("backend.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SightId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SightId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("backend.Models.Route", b =>
                 {
                     b.Property<int>("Id")
@@ -126,12 +158,7 @@ namespace backend.Migrations
                     b.Property<string>("StartingLocation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TripId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TripId");
 
                     b.ToTable("Routes");
                 });
@@ -201,7 +228,12 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TripId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TripId");
 
                     b.ToTable("Sights");
 
@@ -393,15 +425,23 @@ namespace backend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("backend.Models.Route", b =>
+            modelBuilder.Entity("backend.Models.Rating", b =>
                 {
-                    b.HasOne("backend.Models.Trip", "Trip")
-                        .WithMany("Routes")
-                        .HasForeignKey("TripId")
+                    b.HasOne("backend.Models.Sight", "Sight")
+                        .WithMany("Ratings")
+                        .HasForeignKey("SightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Trip");
+                    b.HasOne("backend.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sight");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("backend.Models.RouteSight", b =>
@@ -421,6 +461,15 @@ namespace backend.Migrations
                     b.Navigation("Route");
 
                     b.Navigation("Sight");
+                });
+
+            modelBuilder.Entity("backend.Models.Sight", b =>
+                {
+                    b.HasOne("backend.Models.Trip", "Trip")
+                        .WithMany("Sights")
+                        .HasForeignKey("TripId");
+
+                    b.Navigation("Trip");
                 });
 
             modelBuilder.Entity("backend.Models.Trip", b =>
@@ -465,17 +514,21 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Sight", b =>
                 {
+                    b.Navigation("Ratings");
+
                     b.Navigation("RouteSights");
                 });
 
             modelBuilder.Entity("backend.Models.Trip", b =>
                 {
-                    b.Navigation("Routes");
+                    b.Navigation("Sights");
                 });
 
             modelBuilder.Entity("backend.Models.User", b =>
                 {
                     b.Navigation("OwnedTrips");
+
+                    b.Navigation("Ratings");
 
                     b.Navigation("UserInterests");
                 });
