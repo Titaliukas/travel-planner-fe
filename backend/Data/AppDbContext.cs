@@ -140,5 +140,10 @@ public class AppDbContext : DbContext
 			.HasOne(rs => rs.Sight)
 			.WithMany(s => s.RouteSights)
 			.HasForeignKey(rs => rs.SightId);
+
+        modelBuilder.Entity<Models.Route>()
+            .HasOne(rs => rs.Trip)
+            .WithMany(s => s.Routes)
+            .HasForeignKey(r => r.TripId);
 	}
 }

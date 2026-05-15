@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260514194110_AddTripKeyToRoute")]
+    partial class AddTripKeyToRoute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +95,7 @@ namespace backend.Migrations
                         new
                         {
                             Id = 8,
-                            Name = "Istorija"
+                            Name = "Viduramžiai"
                         },
                         new
                         {
@@ -329,26 +332,6 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            Mail = "jonas@example.com",
-                            Username = "Jonas"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Mail = "petras@example.com",
-                            Username = "Petras"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Mail = "ona@example.com",
-                            Username = "Ona"
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.UserInterest", b =>
