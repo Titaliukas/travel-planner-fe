@@ -213,9 +213,6 @@ namespace backend.Controllers
             return Ok(trip);
         }
 
-        // ========== MANO PRIDĖTOS FUNKCIJOS ==========
-
-        // 1. Gauti visus kelionės keliautojus
         [HttpGet("{tripId}/travelers")]
         public async Task<ActionResult<List<User>>> getTripTravelers(int tripId)
         {
@@ -229,7 +226,6 @@ namespace backend.Controllers
             return Ok(trip.Travelers);
         }
 
-        // 2. Gauti visus sistemos vartotojus
         [HttpGet("users/all")]
         public async Task<ActionResult<List<User>>> getAllUsers()
         {
@@ -237,7 +233,6 @@ namespace backend.Controllers
             return Ok(users);
         }
 
-        // 3. Pridėti pasirinktus keliautojus į kelionę
         [HttpPost("{tripId}/travelers")]
         public async Task<IActionResult> addTravelersToTrip(int tripId, [FromBody] List<int> userIds)
         {
@@ -264,7 +259,6 @@ namespace backend.Controllers
             return Ok(trip.Travelers);
         }
 
-        // 4. Pašalinti pasirinktus keliautojus iš kelionės
         [HttpDelete("{tripId}/travelers")]
         public async Task<IActionResult> removeTravelersFromTrip(int tripId, [FromBody] List<int> userIds)
         {
