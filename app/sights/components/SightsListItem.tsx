@@ -1,67 +1,53 @@
-import { useState } from 'react';
 import { ChevronDown, ChevronUp, MapPin, Clock, Heart } from 'lucide-react';
 
-interface AttractionListItemProps {
+interface SightsListItemProps {
 	id: string;
 	name: string;
 	city: string;
 	address: string;
 	image: string;
-	category: string;
-	rating: number;
-	reviewCount: number;
-	duration: string;
+	duration: number;
 	description: string;
 	fullDescription: string;
-	tags: string[];
-	schedule: { day: string; hours: string }[];
-	onSelect: () => void;
+	isExpanded: boolean;
+	onToggle: () => void;
 }
 
-export function AttractionListItem({
+function secondsToHour(seconds: number) {
+	return seconds / 3600;
+}
+
+export function SightsListItem({
 	name,
 	city,
 	address,
 	image,
-	category,
-	rating,
-	reviewCount,
 	duration,
 	description,
 	fullDescription,
-	tags,
-	schedule,
-	onSelect,
-}: AttractionListItemProps) {
-	const [isExpanded, setIsExpanded] = useState(false);
-
-	const handleToggle = () => {
-		setIsExpanded(!isExpanded);
-		if (!isExpanded) {
-			onSelect();
-		}
-	};
-
+	isExpanded,
+	onToggle,
+}: SightsListItemProps) {
 	return (
 		<div className='border border-border rounded-xl bg-card overflow-hidden hover:shadow-md hover:shadow-primary/5 transition-all duration-200'>
 			{/* Collapsed View */}
 			<button
-				onClick={handleToggle}
+				onClick={onToggle}
 				className='w-full px-5 py-4 flex items-center justify-between text-left hover:bg-muted/30 transition-colors'
 			>
 				<div className='flex-1'>
 					<div className='flex items-center gap-3 mb-1'>
 						<h3 className='group-hover:text-primary transition-colors'>{name}</h3>
-						<span className='px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-semibold'>
+						{/* <span className='px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-semibold'>
 							{category}
-						</span>
+						</span> */}
 					</div>
 					<div className='flex items-center gap-4 text-sm text-muted-foreground'>
 						<div className='flex items-center gap-1'>
 							<MapPin className='w-3.5 h-3.5' />
 							<span>{city}</span>
 						</div>
-						<div className='flex items-center gap-1'>
+						{/* <div className='flex items-center gap-1'>
 							<div className='flex gap-0.5'>
 								{[...Array(5)].map((_, i) => (
 									<span
@@ -73,10 +59,13 @@ export function AttractionListItem({
 								))}
 							</div>
 							<span className='text-xs'>({reviewCount})</span>
-						</div>
+						</div> */}
 						<div className='flex items-center gap-1'>
 							<Clock className='w-3.5 h-3.5' />
-							<span>{duration}</span>
+							<span>
+								{secondsToHour(duration)}
+								{' h'}
+							</span>
 						</div>
 					</div>
 				</div>
@@ -107,13 +96,13 @@ export function AttractionListItem({
 					</div>
 
 					{/* Tags */}
-					<div className='flex flex-wrap gap-2'>
+					{/* <div className='flex flex-wrap gap-2'>
 						{tags.map((tag) => (
 							<span key={tag} className='px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-semibold'>
 								{tag}
 							</span>
 						))}
-					</div>
+					</div> */}
 
 					{/* Description */}
 					<div>
@@ -122,7 +111,7 @@ export function AttractionListItem({
 					</div>
 
 					{/* Schedule */}
-					<div>
+					{/* <div>
 						<h4 className='mb-2'>Darbo laikas</h4>
 						<div className='space-y-2 bg-muted/30 rounded-lg p-3'>
 							{schedule.map((item, index) => (
@@ -132,7 +121,7 @@ export function AttractionListItem({
 								</div>
 							))}
 						</div>
-					</div>
+					</div> */}
 
 					{/* Action Buttons */}
 					<div className='flex gap-3 pt-2'>

@@ -12,7 +12,9 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Interest> Interests => Set<Interest>();
     public DbSet<UserInterest> UserInterests => Set<UserInterest>();
-    public DbSet<Sight> Sights => Set<Sight>();
+    public DbSet<Sight> Sights { get; set; }
+    public DbSet<RouteSight> RouteSights { get; set; }
+    public DbSet<Models.Route> Routes { get; set; }
     public DbSet<Rating> Ratings => Set<Rating>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -139,5 +141,20 @@ public class AppDbContext : DbContext
             new User { Id = 11, Username = "Petras", Mail = "petras@example.com" },
             new User { Id = 12, Username = "Ona", Mail = "ona@example.com" }
         );
-    }
+        
+		modelBuilder.Entity<RouteSight>()
+			.HasKey(rs => new { rs.RouteId, rs.SightId });
+
+        modelBuilder.Entity<RouteSight>()
+            .HasOne(rs => rs.Route)
+            .WithMany(r => r.RouteSights)
+            .HasForeignKey(rs => rs.RouteId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+		modelBuilder.Entity<RouteSight>()
+			.HasOne(rs => rs.Sight)
+			.WithMany(s => s.RouteSights)
+			.HasForeignKey(rs => rs.SightId);
+	}
 }

@@ -17,8 +17,7 @@ namespace backend.Migrations
                 name: "TripId",
                 table: "Sights",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Ratings",
@@ -49,48 +48,55 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.UpdateData(
+                table: "Interests",
+                keyColumn: "Id",
+                keyValue: 8,
+                column: "Name",
+                value: "Istorija");
+
+            migrationBuilder.UpdateData(
                 table: "Sights",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "TripId",
-                value: 0);
+                value: null);
 
             migrationBuilder.UpdateData(
                 table: "Sights",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "TripId",
-                value: 0);
+                value: null);
 
             migrationBuilder.UpdateData(
                 table: "Sights",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "TripId",
-                value: 0);
+                value: null);
 
             migrationBuilder.UpdateData(
                 table: "Sights",
                 keyColumn: "Id",
                 keyValue: 4,
                 column: "TripId",
-                value: 0);
+                value: null);
 
             migrationBuilder.UpdateData(
                 table: "Sights",
                 keyColumn: "Id",
                 keyValue: 5,
                 column: "TripId",
-                value: 0);
+                value: null);
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Mail", "Username" },
                 values: new object[,]
                 {
-                    { 2, "jonas@example.com", "Jonas" },
-                    { 3, "petras@example.com", "Petras" },
-                    { 4, "ona@example.com", "Ona" }
+                    { 10, "jonas@example.com", "Jonas" },
+                    { 11, "petras@example.com", "Petras" },
+                    { 12, "ona@example.com", "Ona" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -113,8 +119,7 @@ namespace backend.Migrations
                 table: "Sights",
                 column: "TripId",
                 principalTable: "Trips",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
@@ -134,21 +139,28 @@ namespace backend.Migrations
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: 2);
+                keyValue: 10);
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: 3);
+                keyValue: 11);
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: 4);
+                keyValue: 12);
 
             migrationBuilder.DropColumn(
                 name: "TripId",
                 table: "Sights");
+
+            migrationBuilder.UpdateData(
+                table: "Interests",
+                keyColumn: "Id",
+                keyValue: 8,
+                column: "Name",
+                value: "Viduramžiai");
         }
     }
 }

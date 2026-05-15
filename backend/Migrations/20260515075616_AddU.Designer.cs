@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260514212542_AddU1")]
-    partial class AddU1
+    [Migration("20260515075616_AddU")]
+    partial class AddU
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,7 +95,7 @@ namespace backend.Migrations
                         new
                         {
                             Id = 8,
-                            Name = "Viduramžiai"
+                            Name = "Istorija"
                         },
                         new
                         {
@@ -136,6 +136,55 @@ namespace backend.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("backend.Models.Route", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<string>("EndingLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StartingLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Routes");
+                });
+
+            modelBuilder.Entity("backend.Models.RouteSight", b =>
+                {
+                    b.Property<int>("RouteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SightId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VisitOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("RouteId", "SightId");
+
+                    b.HasIndex("SightId");
+
+                    b.ToTable("RouteSights");
                 });
 
             modelBuilder.Entity("backend.Models.Sight", b =>
@@ -179,7 +228,7 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TripId")
+                    b.Property<int?>("TripId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -200,8 +249,7 @@ namespace backend.Migrations
                             Duration = 3600,
                             FullDescription = "Gedimino kalnas – vienas svarbiausių Vilniaus simbolių. Ant kalno stūkso Gedimino pilies bokštas, iš kurio atsiveria nuostabi senojo Vilniaus panorama. Kalnas yra archeologinis, istorinis ir kultūrinis paminklas, pritraukiantis tūkstančius lankytojų kasmet.",
                             Name = "Gedimino kalnas",
-                            PhotoUrl = "https://upload.wikimedia.org/wikipedia/commons/9/9d/Gedimino_pilis_by_Augustas_Didzgalvis.jpg",
-                            TripId = 0
+                            PhotoUrl = "https://upload.wikimedia.org/wikipedia/commons/9/9d/Gedimino_pilis_by_Augustas_Didzgalvis.jpg"
                         },
                         new
                         {
@@ -214,8 +262,7 @@ namespace backend.Migrations
                             Duration = 3600,
                             FullDescription = "Kryžių kalnas – vienas žinomiausių Lietuvos piligrimystės centrų, pritraukiantis tūkstančius lankytojų kasmet. Šis unikalus religinis kompleksas, kurį sudaro dešimtys tūkstančių kryžių, liudija lietuvių tautos tikėjimą ir pasiaukojimą. Vieta įtraukta į UNESCO paveldą.",
                             Name = "Kryžių kalnas",
-                            PhotoUrl = "https://www.turistopasaulis.lt/wp-content/uploads/2013/10/kry%C5%BEi%C5%B3-kalnas-05.jpg",
-                            TripId = 0
+                            PhotoUrl = "https://www.turistopasaulis.lt/wp-content/uploads/2013/10/kry%C5%BEi%C5%B3-kalnas-05.jpg"
                         },
                         new
                         {
@@ -228,8 +275,7 @@ namespace backend.Migrations
                             Duration = 3600,
                             FullDescription = "Trijų kryžių kalnas – vienas populiariausių Vilniaus apžvalgos taškų. Ant kalno stovi trys balti betoniniai kryžiai, pastatyti 1989 metais vietoje 1916 m. pastatytų medinių kryžių. Nuo kalno atsiveria įspūdinga Vilniaus senamiestis panorama.",
                             Name = "Trijų kryžių kalnas",
-                            PhotoUrl = "https://tobuladovana.lt/images/blog/5/triju-kryziu-kalnas.jpeg",
-                            TripId = 0
+                            PhotoUrl = "https://tobuladovana.lt/images/blog/5/triju-kryziu-kalnas.jpeg"
                         },
                         new
                         {
@@ -242,8 +288,7 @@ namespace backend.Migrations
                             Duration = 7200,
                             FullDescription = "Trakų salos pilis – vienas iš labiausiai turistų lankomas objektų Lietuvoje. Ši XIV a. pabaigoje pastatyta gotinė pilis yra vienintelė vandeniu apsuptų pilių Rytų Europoje. Čia įsikūręs Trakų istorijos muziejus, vyksta įvairūs renginiai ir festivaliai.",
                             Name = "Trakų pilis",
-                            PhotoUrl = "https://upload.wikimedia.org/wikipedia/commons/7/77/Traku_pilis_by_Augustas_Didzgalvis.jpg",
-                            TripId = 0
+                            PhotoUrl = "https://upload.wikimedia.org/wikipedia/commons/7/77/Traku_pilis_by_Augustas_Didzgalvis.jpg"
                         },
                         new
                         {
@@ -256,8 +301,7 @@ namespace backend.Migrations
                             Duration = 3600,
                             FullDescription = "Puntuko akmuo – didžiausias riedulys Lietuvoje, kurio tūris siekia 265 kubinių metrų. Šis unikalus gamtos paminklas apipintas daugybe legendų ir pasakojimų. Akmuo yra populiari turistų lankoma vieta Anykščių rajone.",
                             Name = "Puntuko akmuo",
-                            PhotoUrl = "https://upload.wikimedia.org/wikipedia/lt/b/b6/LT_Anyksciai_Puntukas_01.jpg",
-                            TripId = 0
+                            PhotoUrl = "https://upload.wikimedia.org/wikipedia/lt/b/b6/LT_Anyksciai_Puntukas_01.jpg"
                         });
                 });
 
@@ -400,13 +444,30 @@ namespace backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("backend.Models.RouteSight", b =>
+                {
+                    b.HasOne("backend.Models.Route", "Route")
+                        .WithMany("RouteSights")
+                        .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Sight", "Sight")
+                        .WithMany("RouteSights")
+                        .HasForeignKey("SightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Route");
+
+                    b.Navigation("Sight");
+                });
+
             modelBuilder.Entity("backend.Models.Sight", b =>
                 {
                     b.HasOne("backend.Models.Trip", "Trip")
                         .WithMany("Sights")
-                        .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TripId");
 
                     b.Navigation("Trip");
                 });
@@ -446,9 +507,16 @@ namespace backend.Migrations
                     b.Navigation("UserInterests");
                 });
 
+            modelBuilder.Entity("backend.Models.Route", b =>
+                {
+                    b.Navigation("RouteSights");
+                });
+
             modelBuilder.Entity("backend.Models.Sight", b =>
                 {
                     b.Navigation("Ratings");
+
+                    b.Navigation("RouteSights");
                 });
 
             modelBuilder.Entity("backend.Models.Trip", b =>
