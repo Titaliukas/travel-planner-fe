@@ -285,12 +285,8 @@ namespace backend.Controllers
         [HttpGet("{tripId}/sights")]
         public async Task<ActionResult<List<Sight>>> getTripSights(int tripId)
         {
-            var tripExists = await _context.Trips.AnyAsync(t => t.Id == tripId);
-            if (!tripExists)
-                return NotFound("Kelionė nerasta");
-
             var sights = await _context.RouteSights
-                .Where(rs => rs.Route.TripId == tripId)
+                .Where(rs => _context.Routes.Any(r => r.Id == rs.RouteId && r.TripId == tripId))
                 .Select(rs => rs.Sight)
                 .Distinct()
                 .ToListAsync();

@@ -58,7 +58,8 @@ function formatDate(dateStr: string | null): string | null {
 	});
 }
 
-function initials(name: string): string {
+function initials(name: string | undefined | null): string {
+	if (!name) return "??";
 	return name
 		.split(' ')
 		.map((n) => n[0])
@@ -127,7 +128,7 @@ export function TripCard({ trip }: { trip: Trip }) {
 								title={user.Name}
 								className={`w-7 h-7 rounded-full text-[10px] font-medium flex items-center justify-center border-2 border-card ${AVATAR_COLORS[i % AVATAR_COLORS.length]} ${i > 0 ? '-ml-2' : ''}`}
 							>
-								{initials(user.Name)}
+								{initials(trip.Owner?.Name || trip.Name)}
 							</div>
 						))}
 						{extraCount > 0 && (

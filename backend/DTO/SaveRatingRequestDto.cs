@@ -1,6 +1,6 @@
 namespace backend.DTO
 {
-    public class SaveRatingRequest
+    public class SaveRatingRequestDto
     {
         public int UserId { get; set; }
         public int SightId { get; set; }

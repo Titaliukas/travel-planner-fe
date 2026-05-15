@@ -18,7 +18,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("getRatings")]
-        public async Task<ActionResult<Dictionary<int, double>>> getRatings([FromBody] GetRatingsRequest request)
+        public async Task<ActionResult<Dictionary<int, double>>> getRatings([FromBody] GetRatingsRequestDto request)
         {
             var ratings = await _context.Ratings
                 .Where(r => request.SightIds.Contains(r.SightId) && request.TravelerIds.Contains(r.UserId))
@@ -36,7 +36,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("saveRatings")]
-        public async Task<IActionResult> saveRatings([FromBody] SaveRatingRequest request)
+        public async Task<IActionResult> saveRatings([FromBody] SaveRatingRequestDto request)
         {
             if (request.Score < 1 || request.Score > 5)
                 return BadRequest(new { message = "Score must be 1-5" });

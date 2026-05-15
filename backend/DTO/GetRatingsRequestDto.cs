@@ -1,6 +1,6 @@
 namespace backend.DTO
 {
-    public class GetRatingsRequest
+    public class GetRatingsRequestDto
     {
         public List<int> SightIds { get; set; } = new();
         public List<int> TravelerIds { get; set; } = new();
